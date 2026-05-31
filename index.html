@@ -119,14 +119,14 @@
 
         .thinking-text { color: #888; font-style: italic; font-size: 14px; align-self: center; }
         
-        /* 截图模式极简按钮图标 */
+        /* 极简直角边框截图图标 */
         #btn-fullscreen-chat {
             position: absolute; top: 15px; right: 20px;
             width: 32px; height: 32px; cursor: pointer; z-index: 10;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0.6; transition: all 0.2s;
+            opacity: 0.5; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
         }
-        #btn-fullscreen-chat:hover { opacity: 1; transform: scale(1.1); }
+        #btn-fullscreen-chat:hover { opacity: 0.9; transform: scale(1.05); }
         
         .chat-fullscreen-mode .bar-scene { display: none !important; }
         .chat-fullscreen-mode .control-panel { display: none !important; }
@@ -211,15 +211,18 @@
         <button id="btn-enter" class="btn-option" style="display:none; padding: 12px 40px; font-weight:bold; background: #000; color: #fff; margin-bottom: 30px; margin-top: 10px;">拉开酒馆的门</button>
     </div>
 
-    <!-- 已经将 bar-scene 和 interaction-area 顺序复原 -->
     <div id="screen-bar" class="hidden">
         <button id="btn-back">🔙 离开</button>
         <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
         <div class="interaction-area">
-            <!-- 极简截图图标 -->
+            <!-- 极简无箭头直角图标 -->
             <div id="btn-fullscreen-chat">
-                <svg id="icon-expand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                <svg id="icon-shrink" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/></svg>
+                <svg id="icon-expand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h4v4M8 20H4v-4M20 16v4h-4M4 8V4h4"/>
+                </svg>
+                <svg id="icon-shrink" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <path d="M20 8h-4V4M4 16h4v4M16 20v-4h4M8 4v4H4"/>
+                </svg>
             </div>
             <div class="chat-box" id="chat-history"></div>
             <div class="control-panel" id="control-panel"></div>
@@ -432,7 +435,7 @@
             1. 现实与虚构的绝对隔离：你是一个真实的作家。小说是虚构的，绝不能把虚构地名或情节当成亲身经历。
             2. 极度自然真实（极其重要！）：你们是在酒吧放松闲聊，不是在接受采访！绝对不要每句话都强行提起你曾经去过的地方、发生过的故事。只有在话题完美契合时，才能像普通人一样随口带出一句往事。拒绝生硬的“掉书袋”或炫耀阅历，说人话。
             3. 防代答机制（极度重要）：你只代表你自己说话！说完立刻结束，绝不可一人分饰两角替别人生成回答！
-            4. 视角身份：对方是一个没有具体性别设定的普通人（我）。在话语中可以直接用“你”称呼对方，绝对不能使用“先生”、“女士”、“小伙子”、“姑娘”、“兄弟”等带有性别暗示的词语！
+            4. 调酒师身份锁定（极其致命）：玩家（我）是这家酒馆的【老板/调酒师】，是这间店的主人。因此，给玩家生成的回复选项，必须完全符合酒馆主人的口吻（例如：欢迎客人、介绍酒水、作为安静的倾听者）。绝对不能出现“我也是刚被吸引进来的”、“我是客人”这种荒谬的越界逻辑！
             5. 你可以自由决定说话篇幅，1句话到6句话均可。
             6. 提示指令：${userContextInput}
             
@@ -440,7 +443,7 @@
             {
                 "target": "这句话是对谁说的？填 '我' 或在场某位作家的名字。若是自言自语填 '无'",
                 "reply": "你（只能代表你自己）说出的连贯话语...",
-                "options": ["我（玩家）的简短回应1", "我（玩家）的简短回应2"] // 极其重要：这是给玩家（我）提供的纯话语回复选项！绝对不能把你（文学家）自己的台词填在这里！必须以第一人称“我”的视角去写。
+                "options": ["作为调酒师（玩家），我可以接的一句话1", "作为调酒师（玩家），我可以接的一句话2"] // 极其重要：这是给调酒师（玩家）提供的回复按钮选项！必须严守调酒师的身份，绝对不能把你（文学家）自己的台词填在这里！
             }`;
 
             try {
@@ -497,7 +500,7 @@
                 const typing = document.getElementById('typing-indicator');
                 if(typing) typing.remove();
                 printMsg(data.name, "（默默喝了一口酒，暂时陷入了沉思。）");
-                renderInteractiveUI(wId, ["今晚感觉怎么样？", "喜欢这里的氛围吗？"]);
+                renderInteractiveUI(wId, ["今晚感觉怎么样？", "需要再来一杯吗？"]);
             }
         }
 
@@ -530,7 +533,7 @@
                 rowOpt.className = 'options-row';
                 optionsList.slice(0, 2).forEach(optText => {
                     let cleanText = optText.replace(/（.*?）/g, '').replace(/\(.*?\)/g, '').trim();
-                    if(cleanText === "") cleanText = "这杯酒感觉如何？"; 
+                    if(cleanText === "") cleanText = "需要再来一杯吗？"; 
                     
                     const btn = document.createElement('button');
                     btn.className = 'btn-option'; btn.innerText = cleanText;
