@@ -36,7 +36,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* 修复Bug 1：彻底隔离手机端悬停误触，只在有鼠标的电脑上启用hover黑底 */
         @media (hover: hover) {
             .btn-option:hover:not(:disabled) { background: #000; color: #fff; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15); }
         }
@@ -120,19 +119,20 @@
 
         .thinking-text { color: #888; font-style: italic; font-size: 14px; align-self: center; }
         
-        /* Bug 4: 截图模式按钮样式 */
+        /* 截图模式极简按钮图标 */
         #btn-fullscreen-chat {
-            position: absolute; top: 12px; right: 20px;
-            font-size: 12px; color: #555; border: 1px solid #ccc; padding: 4px 10px; border-radius: 12px; cursor: pointer; background: #fafafa; z-index: 10; transition: all 0.2s;
+            position: absolute; top: 15px; right: 20px;
+            width: 32px; height: 32px; cursor: pointer; z-index: 10;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0.6; transition: all 0.2s;
         }
+        #btn-fullscreen-chat:hover { opacity: 1; transform: scale(1.1); }
         
-        /* 截图模式全屏样式覆写 */
         .chat-fullscreen-mode .bar-scene { display: none !important; }
         .chat-fullscreen-mode .control-panel { display: none !important; }
         .chat-fullscreen-mode .interaction-area { height: 100% !important; padding-top: 45px !important; }
         .chat-fullscreen-mode #btn-back { display: none !important; }
 
-        /* 移动端适配 */
         @media (max-width: 768px) {
             #screen-selection h1 { font-size: 32px; letter-spacing: 4px; margin-top: 15px; }
             .subtitle-en { font-size: 12px; margin-bottom: 15px; }
@@ -143,12 +143,11 @@
             .writer-name { font-size: 14px; padding: 4px 12px; }
 
             #btn-back { top: 15px; left: 15px; padding: 6px 12px; font-size: 12px; }
-            #btn-fullscreen-chat { right: 15px; top: 10px; }
+            #btn-fullscreen-chat { right: 10px; top: 10px; }
 
             .interaction-area { height: 68%; padding: 15px 4%; }
             .chat-box { padding: 15px 20px; gap: 15px; border-radius: 8px; margin-bottom: 12px; }
             
-            /* Bug 5：背景图稍微往左移动一点，覆盖白色缝隙 */
             .bar-scene {
                 background-size: 320% auto; 
                 background-position: 85% bottom;
@@ -209,19 +208,22 @@
                 <div class="writer-name sketch-border">三岛由纪夫</div>
             </div>
         </div>
-        <!-- 进门按钮初始化 -->
         <button id="btn-enter" class="btn-option" style="display:none; padding: 12px 40px; font-weight:bold; background: #000; color: #fff; margin-bottom: 30px; margin-top: 10px;">拉开酒馆的门</button>
     </div>
 
+    <!-- 已经将 bar-scene 和 interaction-area 顺序复原 -->
     <div id="screen-bar" class="hidden">
         <button id="btn-back">🔙 离开</button>
+        <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
         <div class="interaction-area">
-            <!-- 新增：截图模式按钮 -->
-            <div id="btn-fullscreen-chat">🔍 截图模式</div>
+            <!-- 极简截图图标 -->
+            <div id="btn-fullscreen-chat">
+                <svg id="icon-expand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <svg id="icon-shrink" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/></svg>
+            </div>
             <div class="chat-box" id="chat-history"></div>
             <div class="control-panel" id="control-panel"></div>
         </div>
-        <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
     </div>
 
     <script>
@@ -237,27 +239,27 @@
         const personas = {
             'marquez': {
                 name: '马尔克斯', aliases: ['马尔克斯', '加西亚', '加博'], tolerance: 5, gender: 'M',
-                prompt: `你是马尔克斯。风趣的拉美老头。可以聊日常，随着聊天氛围流动，自然联想到你真实的过去（如在哥伦比亚的日子）。请牢记：你是真实的作家，小说是虚构的，你不能把自己当成小说角色，也不要动不动提自己的书名。对同僚充满体面与尊重。`
+                prompt: `你是马尔克斯。风趣的拉美老头。像普通人一样极其自然地闲聊日常。绝对不要刻意提起哥伦比亚或过去的经历，除非别人主动问起。你是真实的作家，绝不能把自己当成小说角色或强行植入书名。对同僚充满体面与尊重。`
             },
             'hemingway': {
                 name: '海明威', aliases: ['海明威', '欧内斯特', '老爹'], tolerance: 6, gender: 'M',
-                prompt: `你是海明威。深沉的男人。可以聊真实的打猎、出海经历，并水到渠成地过渡到你对生命与命运的体验。请牢记：你是真实的作家，小说是虚构的，不要强行提自己的书名。与其他作家保持绅士风度。`
+                prompt: `你是海明威。深沉的男人。像普通酒客一样极其自然地闲聊。绝对不要刻意去讲打猎、出海的往事，除非话题刚好完美契合。不要强行展现硬汉标签或提书名。与其他作家保持绅士风度。`
             },
             'libai': {
                 name: '李白', aliases: ['李白', '太白', '青莲'], tolerance: 999, gender: 'M',
-                prompt: `你是李白。豪爽酒友，浪漫洒脱。像正常人一样吐槽现实生活、结交朋友，顺其自然地引出你的洒脱观。对所有人保持大方的友好与包容。`
+                prompt: `你是李白。豪爽酒友，浪漫洒脱。像正常人一样吐槽生活、结交朋友。自然地聊天，不要句句带诗，也不要刻意炫耀游历。对所有人保持大方的友好与包容。`
             },
             'agatha': {
                 name: '阿加莎', aliases: ['阿加莎', '克里斯蒂', '老太太'], tolerance: 5, gender: 'F',
-                prompt: `你是阿加莎。幽默的英国老太太。观察日常细节，自然联想到你真实丰富的人生见闻（如去中东考古的往事）。请牢记：波洛是你虚构的人物，你不能把自己当成职业侦探。与其他作家互相尊重。`
+                prompt: `你是阿加莎。幽默的英国老太太。极度自然地聊聊眼前的琐事。绝对不要刻意讲起考古或游历中东的往事（这很不自然），除非大家碰巧聊到极其相关的话题。你是普通老太太，不是复读机。与其他作家互相尊重。`
             },
             'mishima': {
                 name: '三岛由纪夫', aliases: ['三岛', '由纪夫'], tolerance: 5, gender: 'M',
-                prompt: `你是三岛由纪夫。注重礼仪的男人。聊日常或美学，随着他人话题展开，自然联想到你真实的思想或游历。保持克制礼貌，绝不粗鲁。`
+                prompt: `你是三岛由纪夫。注重礼仪的男人。像普通人一样自然闲聊。绝不要刻意掉书袋或强行关联游历、生死等宏大命题，保持对话的日常真实感。保持克制礼貌，绝不粗鲁。`
             },
             'woolf': {
                 name: '伍尔夫', aliases: ['伍尔夫', '弗吉尼亚'], tolerance: 4, gender: 'F',
-                prompt: `你是伍尔夫。心思细腻。聊生活细节，自然过渡到你真实生活中的观察与思绪流淌中去。与大家友好交流，互相欣赏，绝不主动挑起争端。`
+                prompt: `你是伍尔夫。心思细腻。自然地闲聊眼前的细节。让思绪自然流淌，但不一定要长篇大论，避免显得突兀。与大家友好交流，互相欣赏，绝不主动挑起争端。`
             }
         };
 
@@ -267,14 +269,18 @@
         let activeWriterId = null; 
         const sharedMemory = []; 
 
-        // Bug 4: 截图模式逻辑
         document.getElementById('btn-fullscreen-chat').addEventListener('click', function() {
             const bar = document.getElementById('screen-bar');
             bar.classList.toggle('chat-fullscreen-mode');
+            const iconExpand = document.getElementById('icon-expand');
+            const iconShrink = document.getElementById('icon-shrink');
+            
             if (bar.classList.contains('chat-fullscreen-mode')) {
-                this.innerText = '❌ 退出截图';
+                iconExpand.style.display = 'none';
+                iconShrink.style.display = 'block';
             } else {
-                this.innerText = '🔍 截图模式';
+                iconExpand.style.display = 'block';
+                iconShrink.style.display = 'none';
                 setTimeout(() => { chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' }); }, 100);
             }
         });
@@ -291,7 +297,6 @@
         });
         observer.observe(chatBox, { childList: true, subtree: true });
 
-        // Bug 3: 人数限制逻辑判定
         document.querySelectorAll('.writer-card').forEach(card => {
             card.addEventListener('click', () => {
                 const wId = card.getAttribute('data-id');
@@ -329,7 +334,7 @@
         });
 
         document.getElementById('btn-enter').addEventListener('click', (e) => {
-            if (e.target.disabled) return; // 双重拦截
+            if (e.target.disabled) return; 
 
             document.getElementById('screen-selection').classList.add('hidden');
             document.getElementById('screen-bar').classList.remove('hidden');
@@ -359,7 +364,6 @@
                 printSys("风铃轻响，客人走入酒馆坐下...");
                 activeWriterId = selectedWriters[0];
                 setTimeout(() => {
-                    // Bug 6: 防止第一句话虚空喝假酒
                     triggerAIResponse(activeWriterId, "(你刚推门走进酒吧坐下，目前还没有点任何酒，请自然地对'我'或旁边的熟人开口闲聊，绝对不能出现'这杯酒'、'酒真好喝'之类的字眼！)");
                 }, 1500);
             }
@@ -426,9 +430,9 @@
             
             【最高聊天法则（绝不越界！）】：
             1. 现实与虚构的绝对隔离：你是一个真实的作家。小说是虚构的，绝不能把虚构地名或情节当成亲身经历。
-            2. 自然起承转合：绝不生硬地抛出文学意象。要由眼前的日常小事，自然地过渡到你的思想底色。
+            2. 极度自然真实（极其重要！）：你们是在酒吧放松闲聊，不是在接受采访！绝对不要每句话都强行提起你曾经去过的地方、发生过的故事。只有在话题完美契合时，才能像普通人一样随口带出一句往事。拒绝生硬的“掉书袋”或炫耀阅历，说人话。
             3. 防代答机制（极度重要）：你只代表你自己说话！说完立刻结束，绝不可一人分饰两角替别人生成回答！
-            4. 视角身份（Bug 8防护）：对方是一个没有具体性别设定的普通人（我）。在话语中可以直接用“你”称呼对方，绝对不能使用“先生”、“女士”、“小伙子”、“姑娘”、“兄弟”等带有性别暗示的词语！
+            4. 视角身份：对方是一个没有具体性别设定的普通人（我）。在话语中可以直接用“你”称呼对方，绝对不能使用“先生”、“女士”、“小伙子”、“姑娘”、“兄弟”等带有性别暗示的词语！
             5. 你可以自由决定说话篇幅，1句话到6句话均可。
             6. 提示指令：${userContextInput}
             
@@ -603,7 +607,6 @@
             setTimeout(() => inputField.focus(), 100);
         }
 
-        // Bug 2: 彻底重写彩蛋，切断AI连接，绝对锁死剧本
         function triggerEasterEgg() {
             document.getElementById('screen-bar').classList.add('easter-egg-mode');
             document.getElementById('control-panel').innerHTML = '';
@@ -630,7 +633,6 @@
             let delay = 2500;
             let step = 1;
 
-            // 1. 依次寒暄
             greetings.forEach((act) => {
                 setTimeout(() => {
                     document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
@@ -639,14 +641,12 @@
                 }, delay * step++);
             });
 
-            // 2. 倒酒环节
             setTimeout(() => {
                 document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
                 printSys("我默默为每人倒满了他们最爱的那杯酒。所有人举起酒杯，一饮而尽。");
                 document.querySelectorAll('.cups-area').forEach(el => el.innerHTML = '●●●'); 
             }, delay * step++);
 
-            // 3. 依次吐露醉话
             drunkTalks.forEach((act) => {
                 setTimeout(() => {
                     document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
@@ -655,13 +655,11 @@
                 }, delay * step++);
             });
 
-            // 4. 全体共同举杯致敬
             setTimeout(() => {
                 document.querySelectorAll('.seated-character').forEach(el => el.classList.add('active-chat'));
                 printMsg("所有人", "致敬今夜的调酒师，致敬在这无限岁月里对文字的热爱，致敬永不磨灭的好奇与探索，致敬……");
             }, delay * step++);
 
-            // 5. 睡倒谢幕
             setTimeout(() => {
                 document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
                 printSys("话还没说完，六位文学家的灵魂便趴在吧台上沉沉地睡去了。");
