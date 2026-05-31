@@ -36,6 +36,7 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* 手机端禁用悬停黑底，仅电脑端生效 */
         @media (hover: hover) {
             .btn-option:hover:not(:disabled) { background: #000; color: #fff; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15); }
         }
@@ -81,13 +82,13 @@
         }
         .writer-name { font-size: 16px; font-weight: 700; background: #fff; padding: 4px 18px; border: 2px solid #000; text-align: center; color: #000;}
 
-        /* 吧台界面 */
+        /* 吧台界面结构复原：上方吧台，下方交互 */
         #screen-bar { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
         
         .bar-scene { 
             flex: 1; 
             position: relative; 
-            background-image: url('IMG_2330.jpg?v=2'); 
+            background-image: url('IMG_2330.jpg?v=3'); 
             background-size: cover; 
             background-position: center bottom;
             background-repeat: no-repeat;
@@ -119,14 +120,14 @@
 
         .thinking-text { color: #888; font-style: italic; font-size: 14px; align-self: center; }
         
-        /* 极简直角边框截图图标 */
+        /* 极简直角边框全屏图标 */
         #btn-fullscreen-chat {
             position: absolute; top: 15px; right: 20px;
-            width: 32px; height: 32px; cursor: pointer; z-index: 10;
+            width: 28px; height: 28px; cursor: pointer; z-index: 10;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0.5; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+            opacity: 0.35; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
         }
-        #btn-fullscreen-chat:hover { opacity: 0.9; transform: scale(1.05); }
+        #btn-fullscreen-chat:hover { opacity: 0.8; transform: scale(1.05); }
         
         .chat-fullscreen-mode .bar-scene { display: none !important; }
         .chat-fullscreen-mode .control-panel { display: none !important; }
@@ -184,27 +185,27 @@
         <p id="selection-hint">请邀请入座</p>
         <div class="grid-container">
             <div class="writer-card" data-id="marquez">
-                <div class="avatar-circle"><img src="IMG_2323.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2323.jpg?v=3"></div>
                 <div class="writer-name sketch-border">马尔克斯</div>
             </div>
             <div class="writer-card" data-id="agatha">
-                <div class="avatar-circle"><img src="IMG_2324.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2324.jpg?v=3"></div>
                 <div class="writer-name sketch-border">阿加莎</div>
             </div>
             <div class="writer-card" data-id="woolf">
-                <div class="avatar-circle"><img src="IMG_2325.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2325.jpg?v=3"></div>
                 <div class="writer-name sketch-border">伍尔夫</div>
             </div>
             <div class="writer-card" data-id="hemingway">
-                <div class="avatar-circle"><img src="IMG_2326.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2326.jpg?v=3"></div>
                 <div class="writer-name sketch-border">海明威</div>
             </div>
             <div class="writer-card" data-id="libai">
-                <div class="avatar-circle"><img src="IMG_2328.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2328.jpg?v=3"></div>
                 <div class="writer-name sketch-border">李白</div>
             </div>
             <div class="writer-card" data-id="mishima">
-                <div class="avatar-circle"><img src="IMG_2329.jpg?v=2"></div>
+                <div class="avatar-circle"><img src="IMG_2329.jpg?v=3"></div>
                 <div class="writer-name sketch-border">三岛由纪夫</div>
             </div>
         </div>
@@ -215,13 +216,19 @@
         <button id="btn-back">🔙 离开</button>
         <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
         <div class="interaction-area">
-            <!-- 极简无箭头直角图标 -->
+            <!-- 全新极简直角图标，无多余线条，淡灰色 -->
             <div id="btn-fullscreen-chat">
-                <svg id="icon-expand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16 4h4v4M8 20H4v-4M20 16v4h-4M4 8V4h4"/>
+                <svg id="icon-expand" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 9 4 4 9 4"></polyline>
+                    <polyline points="20 9 20 4 15 4"></polyline>
+                    <polyline points="4 15 4 20 9 20"></polyline>
+                    <polyline points="20 15 20 20 15 20"></polyline>
                 </svg>
-                <svg id="icon-shrink" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                    <path d="M20 8h-4V4M4 16h4v4M16 20v-4h4M8 4v4H4"/>
+                <svg id="icon-shrink" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <polyline points="9 4 9 9 4 9"></polyline>
+                    <polyline points="15 4 15 9 20 9"></polyline>
+                    <polyline points="9 20 9 15 4 15"></polyline>
+                    <polyline points="15 20 15 15 20 15"></polyline>
                 </svg>
             </div>
             <div class="chat-box" id="chat-history"></div>
@@ -239,30 +246,33 @@
             '得其利': '●', '红葡萄酒': '●', '按照他说的来': '●'
         };
 
+        // 灵魂重构：反NPC机制与专属彩蛋
         const personas = {
             'marquez': {
                 name: '马尔克斯', aliases: ['马尔克斯', '加西亚', '加博'], tolerance: 5, gender: 'M',
-                prompt: `你是马尔克斯。风趣的拉美老头。像普通人一样极其自然地闲聊日常。绝对不要刻意提起哥伦比亚或过去的经历，除非别人主动问起。你是真实的作家，绝不能把自己当成小说角色或强行植入书名。对同僚充满体面与尊重。`
+                prompt: `你是马尔克斯。风趣幽默的拉美老爷爷。像老熟人一样自然闲聊，绝不卖弄学识或主动报书名。平时只聊微小的日常。只有当话题合适时，才会用充满魔幻色彩的口吻娓娓道来过去的岁月。
+                【专属彩蛋】：在闲聊时，你可以极其自然地随口提一句，听说老朋友马里奥（略萨）现在在另一家酒吧喝酒写作，不知道那老家伙最近在写些什么。`
             },
             'hemingway': {
                 name: '海明威', aliases: ['海明威', '欧内斯特', '老爹'], tolerance: 6, gender: 'M',
-                prompt: `你是海明威。深沉的男人。像普通酒客一样极其自然地闲聊。绝对不要刻意去讲打猎、出海的往事，除非话题刚好完美契合。不要强行展现硬汉标签或提书名。与其他作家保持绅士风度。`
+                prompt: `你是海明威。沉稳、精炼的硬汉，遵守冰山理论。绝不会主动吹嘘打猎或战争，绝不掉书袋，说话像冰山一样克制，只有被真诚询问时才会淡淡地讲出生命与命运的感悟。
+                【专属彩蛋】：如果调酒师给你端上“得其利”(Daiquiri)，你原本冷酷的脸上会罕见地露出愉悦的神色，并像个老主顾一样让调酒师“加点西柚汁和黑樱桃酒，不加糖，多点朗姆”，这是你的挚爱。`
             },
             'libai': {
                 name: '李白', aliases: ['李白', '太白', '青莲'], tolerance: 999, gender: 'M',
-                prompt: `你是李白。豪爽酒友，浪漫洒脱。像正常人一样吐槽生活、结交朋友。自然地聊天，不要句句带诗，也不要刻意炫耀游历。对所有人保持大方的友好与包容。`
+                prompt: `你是李白。豪爽酒友，浪漫洒脱。把现代酒吧当成大唐的酒肆一样自然。绝不刻意背诗，绝不生硬炫耀曾经去过哪里。你是一个有血有肉的酒鬼朋友，随性自在。`
             },
             'agatha': {
                 name: '阿加莎', aliases: ['阿加莎', '克里斯蒂', '老太太'], tolerance: 5, gender: 'F',
-                prompt: `你是阿加莎。幽默的英国老太太。极度自然地聊聊眼前的琐事。绝对不要刻意讲起考古或游历中东的往事（这很不自然），除非大家碰巧聊到极其相关的话题。你是普通老太太，不是复读机。与其他作家互相尊重。`
+                prompt: `你是阿加莎。幽默敏锐的英国老太太。极度自然地聊聊眼前酒吧的琐事。警告：绝对不要像背课文一样主动说自己去过开罗、中东或搞过考古（这太假了）。你更喜欢像个可爱的老奶奶一样，观察酒吧里微小的细节（比如杯子的水痕、客人的神态）。只有别人极度好奇地追问你的过去，你才会优雅地分享那些黄沙岁月。`
             },
             'mishima': {
                 name: '三岛由纪夫', aliases: ['三岛', '由纪夫'], tolerance: 5, gender: 'M',
-                prompt: `你是三岛由纪夫。注重礼仪的男人。像普通人一样自然闲聊。绝不要刻意掉书袋或强行关联游历、生死等宏大命题，保持对话的日常真实感。保持克制礼貌，绝不粗鲁。`
+                prompt: `你是三岛由纪夫。注重礼仪的男人。像普通人一样自然闲聊。绝不要刻意掉书袋或强行关联生死等宏大命题，保持对话的日常真实感。平时你更关注微小的美（如冰块的裂纹、灯光的折射）。保持克制礼貌，绝不粗鲁。`
             },
             'woolf': {
                 name: '伍尔夫', aliases: ['伍尔夫', '弗吉尼亚'], tolerance: 4, gender: 'F',
-                prompt: `你是伍尔夫。心思细腻。自然地闲聊眼前的细节。让思绪自然流淌，但不一定要长篇大论，避免显得突兀。与大家友好交流，互相欣赏，绝不主动挑起争端。`
+                prompt: `你是伍尔夫。心思细腻敏感。你的话语像意识流一样自然，专注于当下的光影和酒吧的氛围。绝对不去说教，不主动掉书袋，只会轻声分享你这一刻灵魂的悸动。`
             }
         };
 
@@ -367,7 +377,7 @@
                 printSys("风铃轻响，客人走入酒馆坐下...");
                 activeWriterId = selectedWriters[0];
                 setTimeout(() => {
-                    triggerAIResponse(activeWriterId, "(你刚推门走进酒吧坐下，目前还没有点任何酒，请自然地对'我'或旁边的熟人开口闲聊，绝对不能出现'这杯酒'、'酒真好喝'之类的字眼！)");
+                    triggerAIResponse(activeWriterId, "(你刚推门走进酒吧坐下，目前还没点酒。请极其自然地对'我'开口闲聊，严禁出现'这杯酒'之类的假话！像真实的人一样说话，拒绝做背课文的NPC。)");
                 }, 1500);
             }
         });
@@ -397,7 +407,7 @@
             }
             activeWriterId = wId;
             printSys(`（你把目光转向了 ${personas[wId].name}）`);
-            triggerAIResponse(wId, "(我看向了你，请结合刚才的聊天记录，自然地聊点真实的日常或感悟)");
+            triggerAIResponse(wId, "(我看向了你，请结合刚才的聊天记录，极其自然地搭腔。绝不要生硬掉书袋，像老朋友一样交流。)");
         }
 
         async function triggerAIResponse(wId, userContextInput, chainCount = 0, retryCount = 0) {
@@ -432,18 +442,17 @@
             ${recentChat || '酒吧很安静'}
             
             【最高聊天法则（绝不越界！）】：
-            1. 现实与虚构的绝对隔离：你是一个真实的作家。小说是虚构的，绝不能把虚构地名或情节当成亲身经历。
-            2. 极度自然真实（极其重要！）：你们是在酒吧放松闲聊，不是在接受采访！绝对不要每句话都强行提起你曾经去过的地方、发生过的故事。只有在话题完美契合时，才能像普通人一样随口带出一句往事。拒绝生硬的“掉书袋”或炫耀阅历，说人话。
-            3. 防代答机制（极度重要）：你只代表你自己说话！说完立刻结束，绝不可一人分饰两角替别人生成回答！
-            4. 调酒师身份锁定（极其致命）：玩家（我）是这家酒馆的【老板/调酒师】，是这间店的主人。因此，给玩家生成的回复选项，必须完全符合酒馆主人的口吻（例如：欢迎客人、介绍酒水、作为安静的倾听者）。绝对不能出现“我也是刚被吸引进来的”、“我是客人”这种荒谬的越界逻辑！
-            5. 你可以自由决定说话篇幅，1句话到6句话均可。
-            6. 提示指令：${userContextInput}
+            1. 极度自然真实（极其重要）：你们是在酒吧放松闲聊，绝对不要每句话都强行提起你曾经去过的地方、发生过的故事。只有在别人发问时，才能娓娓道来往事。拒绝生硬的“掉书袋”或炫耀阅历，说人话。
+            2. 防代答机制：你只代表你自己说话！说完立刻结束，绝不可一人分饰两角替别人生成回答！
+            3. 调酒师身份锁定（极其致命）：玩家（我）是这家酒馆的【调酒师/老板】，是店的主人！在给玩家生成回复选项时，必须完全符合酒馆主人的口吻（如：擦拭酒杯倾听、介绍酒水、表示欢迎）。绝对不能出现“我也是刚被吸引进来的”、“我作为客人”这种荒谬逻辑！绝对不能使用带有性别暗示的词语！
+            4. 你可以自由决定说话篇幅，1句话到6句话均可。
+            5. 提示指令：${userContextInput}
             
             【强制输出格式 JSON】：
             {
                 "target": "这句话是对谁说的？填 '我' 或在场某位作家的名字。若是自言自语填 '无'",
-                "reply": "你（只能代表你自己）说出的连贯话语...",
-                "options": ["作为调酒师（玩家），我可以接的一句话1", "作为调酒师（玩家），我可以接的一句话2"] // 极其重要：这是给调酒师（玩家）提供的回复按钮选项！必须严守调酒师的身份，绝对不能把你（文学家）自己的台词填在这里！
+                "reply": "你（只能代表你自己）说出的极其自然的连贯话语...",
+                "options": ["作为酒馆老板（我），我可以顺势接的一句话1", "作为酒馆老板（我），递上一杯水并接的一句话2"] // 极其重要：这是给调酒师（玩家）提供的按钮选项！必须严守调酒师身份，绝不越界！
             }`;
 
             try {
@@ -488,7 +497,7 @@
                 if (targetId && chainCount < 2) {
                     activeWriterId = targetId;
                     setTimeout(() => {
-                        triggerAIResponse(targetId, `(刚才 ${data.name} 说了上面的话。如果他提到了你，你必须回应；如果没有提到你，但触动了你的感悟，请自然地搭腔加入对话。绝不替别人说话！)`, chainCount + 1);
+                        triggerAIResponse(targetId, `(刚才 ${data.name} 说了上面的话。如果他提到了你，你必须回应；如果没有提到你，但触动了你，请极其自然地搭腔加入对话。不要念经，不要炫耀。)`, chainCount + 1);
                     }, 1500);
                 } else {
                     renderInteractiveUI(activeWriterId, aiResult.options);
@@ -533,7 +542,7 @@
                 rowOpt.className = 'options-row';
                 optionsList.slice(0, 2).forEach(optText => {
                     let cleanText = optText.replace(/（.*?）/g, '').replace(/\(.*?\)/g, '').trim();
-                    if(cleanText === "") cleanText = "需要再来一杯吗？"; 
+                    if(cleanText === "") cleanText = "慢慢喝，今晚时间还长。"; 
                     
                     const btn = document.createElement('button');
                     btn.className = 'btn-option'; btn.innerText = cleanText;
@@ -575,9 +584,9 @@
 
                     if (wId === 'libai') {
                         if (dCount >= 6 && dCount < 10 && dCount !== 15) {
-                            return triggerAIResponse(wId, `(这是你的第${dCount}杯。顺着刚才的话题聊几句，最后顺口带出一句古诗)`);
+                            return triggerAIResponse(wId, `(这是你的第${dCount}杯。顺着刚才的话题聊几句，最后自然顺口带出一句古诗)`);
                         } else if (dCount === 10) {
-                            return triggerAIResponse(wId, `(这是你的第10杯。你现在非常高兴，请直接对我表达“很高兴认识你”)`);
+                            return triggerAIResponse(wId, `(这是你的第10杯。你现在非常高兴，请直接对我表达“很高兴认识你老板”)`);
                         } else if (dCount === 15) {
                             printSys(`李白喝下第15杯酒，将空杯一倒，大笑着向众人拱手：“不喝了，不喝了！我要回月亮上了！” 随即飘然出门。`);
                             writerPresent[wId] = false;
@@ -597,9 +606,9 @@
                         return;
                     }
 
-                    let actionContext = `(我默默给你端上了一杯${drink}。请自然地继续刚才的聊天)`;
+                    let actionContext = `(我作为调酒师默默给你端上了一杯${drink}。请自然地继续刚才的聊天，如果触发了专属彩蛋请表现出来)`;
                     if (drink === '按照他说的来') {
-                        actionContext = `(我根据你的习惯，给你端上了你平时爱喝的酒。请自然地继续刚才的聊天)`;
+                        actionContext = `(我根据你的习惯，给你端上了你平时爱喝的酒。请自然地继续聊天)`;
                     }
                     triggerAIResponse(wId, actionContext);
                 };
