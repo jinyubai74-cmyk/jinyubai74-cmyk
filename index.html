@@ -35,17 +35,22 @@
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
-        .btn-option:hover:not(:disabled) { background: #000; color: #fff; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15); }
-        .btn-option:active { transform: translate(0, 0); box-shadow: none; }
+        
+        /* 修复Bug 1：彻底隔离手机端悬停误触，只在有鼠标的电脑上启用hover黑底 */
+        @media (hover: hover) {
+            .btn-option:hover:not(:disabled) { background: #000; color: #fff; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15); }
+        }
+        .btn-option:active:not(:disabled) { background: #000; color: #fff; transform: translate(0, 0); box-shadow: none; }
         .btn-option:disabled { opacity: 0.5; cursor: not-allowed; border-color: #ccc; color: #999; }
+        
         .btn-drink-action { border-color: #000; color: #000; font-weight: bold; }
-        .btn-drink-action:hover:not(:disabled) { background: #000; color: #fff; }
+        .btn-drink-action:active:not(:disabled) { background: #000; color: #fff; }
 
         .custom-input-container { display: flex; gap: 12px; width: 100%; max-width: 650px; justify-content: center; margin-bottom: 5px; }
         .custom-input { flex: 1; padding: 12px 18px; border: 2px solid #000; border-radius: 25px; font-family: inherit; font-size: 15px; outline: none; background: #fafafa; transition: all 0.3s; color: #000; -webkit-appearance: none;}
         .custom-input:focus { border-color: #000; background: #fff; box-shadow: 0 0 8px rgba(0,0,0,0.1);}
 
-        /* 选人界面：彻底解决 iOS 无法向下滚动的 Bug */
+        /* 选人界面 */
         #screen-selection { 
             text-align: center; width: 100%; max-width: 900px; padding: 20px; padding-top: 8vh;
             height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -83,7 +88,7 @@
         .bar-scene { 
             flex: 1; 
             position: relative; 
-            background-image: url('IMG_2330.jpg?v=2'); /* 防缓存 */
+            background-image: url('IMG_2330.jpg?v=2'); 
             background-size: cover; 
             background-position: center bottom;
             background-repeat: no-repeat;
@@ -100,7 +105,7 @@
         
         .cups-area { display: flex; flex-wrap: wrap; justify-content: center; min-height: 24px; font-size: 12px; color: #000; letter-spacing: 4px; margin-top: 12px; max-width: 120px; }
 
-        .interaction-area { height: 60%; padding: 20px 10%; display: flex; flex-direction: column; align-items: center; background: #ffffff; }
+        .interaction-area { height: 60%; padding: 20px 10%; display: flex; flex-direction: column; align-items: center; background: #ffffff; position: relative;}
         .chat-box { width: 100%; max-width: 850px; flex: 1; overflow-y: auto; padding: 25px 40px; margin-bottom: 15px; background: #fff; display: flex; flex-direction: column; gap: 20px; scrollbar-width: thin; scrollbar-color: #ddd transparent; -webkit-overflow-scrolling: touch; }
         
         .message { line-height: 1.8; font-size: 16px; color: #000; max-width: 90%; word-wrap: break-word;}
@@ -114,8 +119,20 @@
         .options-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; }
 
         .thinking-text { color: #888; font-style: italic; font-size: 14px; align-self: center; }
+        
+        /* Bug 4: 截图模式按钮样式 */
+        #btn-fullscreen-chat {
+            position: absolute; top: 12px; right: 20px;
+            font-size: 12px; color: #555; border: 1px solid #ccc; padding: 4px 10px; border-radius: 12px; cursor: pointer; background: #fafafa; z-index: 10; transition: all 0.2s;
+        }
+        
+        /* 截图模式全屏样式覆写 */
+        .chat-fullscreen-mode .bar-scene { display: none !important; }
+        .chat-fullscreen-mode .control-panel { display: none !important; }
+        .chat-fullscreen-mode .interaction-area { height: 100% !important; padding-top: 45px !important; }
+        .chat-fullscreen-mode #btn-back { display: none !important; }
 
-        /* ================= 移动端极限完美裁切适配 ================= */
+        /* 移动端适配 */
         @media (max-width: 768px) {
             #screen-selection h1 { font-size: 32px; letter-spacing: 4px; margin-top: 15px; }
             .subtitle-en { font-size: 12px; margin-bottom: 15px; }
@@ -126,17 +143,17 @@
             .writer-name { font-size: 14px; padding: 4px 12px; }
 
             #btn-back { top: 15px; left: 15px; padding: 6px 12px; font-size: 12px; }
+            #btn-fullscreen-chat { right: 15px; top: 10px; }
 
             .interaction-area { height: 68%; padding: 15px 4%; }
             .chat-box { padding: 15px 20px; gap: 15px; border-radius: 8px; margin-bottom: 12px; }
             
-            /* 手机端背景图向右下角靠拢放大，完美隐藏左侧的植物，只留吧台纯黑线 */
+            /* Bug 5：背景图稍微往左移动一点，覆盖白色缝隙 */
             .bar-scene {
-                background-size: 250% auto; 
-                background-position: right bottom;
+                background-size: 320% auto; 
+                background-position: 85% bottom;
             }
 
-            /* 头像调大，消除底部距离，完全贴合在吧台线上 */
             .bar-characters { gap: 15px; bottom: 8px; }
             .seated-character .avatar-circle { width: 90px; height: 90px; border-width: 2px; margin-bottom: 8px;}
             .writer-card.selected .avatar-circle { border-width: 3px; }
@@ -192,16 +209,19 @@
                 <div class="writer-name sketch-border">三岛由纪夫</div>
             </div>
         </div>
+        <!-- 进门按钮初始化 -->
         <button id="btn-enter" class="btn-option" style="display:none; padding: 12px 40px; font-weight:bold; background: #000; color: #fff; margin-bottom: 30px; margin-top: 10px;">拉开酒馆的门</button>
     </div>
 
     <div id="screen-bar" class="hidden">
         <button id="btn-back">🔙 离开</button>
-        <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
         <div class="interaction-area">
+            <!-- 新增：截图模式按钮 -->
+            <div id="btn-fullscreen-chat">🔍 截图模式</div>
             <div class="chat-box" id="chat-history"></div>
             <div class="control-panel" id="control-panel"></div>
         </div>
+        <div class="bar-scene"><div class="bar-characters" id="seated-area"></div></div>
     </div>
 
     <script>
@@ -247,6 +267,18 @@
         let activeWriterId = null; 
         const sharedMemory = []; 
 
+        // Bug 4: 截图模式逻辑
+        document.getElementById('btn-fullscreen-chat').addEventListener('click', function() {
+            const bar = document.getElementById('screen-bar');
+            bar.classList.toggle('chat-fullscreen-mode');
+            if (bar.classList.contains('chat-fullscreen-mode')) {
+                this.innerText = '❌ 退出截图';
+            } else {
+                this.innerText = '🔍 截图模式';
+                setTimeout(() => { chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' }); }, 100);
+            }
+        });
+
         document.getElementById('btn-back').addEventListener('click', () => {
             if(confirm('是否确定离开酒吧？（这会清空今晚的记忆）')) {
                 window.location.reload(); 
@@ -259,6 +291,7 @@
         });
         observer.observe(chatBox, { childList: true, subtree: true });
 
+        // Bug 3: 人数限制逻辑判定
         document.querySelectorAll('.writer-card').forEach(card => {
             card.addEventListener('click', () => {
                 const wId = card.getAttribute('data-id');
@@ -272,15 +305,32 @@
                 }
                 
                 const btn = document.getElementById('btn-enter');
-                if (selectedWriters.length > 0) {
+                const len = selectedWriters.length;
+                
+                if (len > 0 && len <= 3) {
                     btn.style.display = 'inline-block'; 
+                    btn.innerText = '拉开酒馆的门';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                } else if (len === 4 || len === 5) {
+                    btn.style.display = 'inline-block'; 
+                    btn.innerText = '今夜位置不够 请减少邀请';
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                } else if (len === 6) {
+                    btn.style.display = 'inline-block'; 
+                    btn.innerText = '拉开酒馆的门';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
                 } else {
                     btn.style.display = 'none'; 
                 }
             });
         });
 
-        document.getElementById('btn-enter').addEventListener('click', () => {
+        document.getElementById('btn-enter').addEventListener('click', (e) => {
+            if (e.target.disabled) return; // 双重拦截
+
             document.getElementById('screen-selection').classList.add('hidden');
             document.getElementById('screen-bar').classList.remove('hidden');
             const seatedArea = document.getElementById('seated-area');
@@ -309,7 +359,8 @@
                 printSys("风铃轻响，客人走入酒馆坐下...");
                 activeWriterId = selectedWriters[0];
                 setTimeout(() => {
-                    triggerAIResponse(activeWriterId, "(你刚走进酒吧坐下，请自然地对'我'或旁边的熟人开口闲聊)");
+                    // Bug 6: 防止第一句话虚空喝假酒
+                    triggerAIResponse(activeWriterId, "(你刚推门走进酒吧坐下，目前还没有点任何酒，请自然地对'我'或旁边的熟人开口闲聊，绝对不能出现'这杯酒'、'酒真好喝'之类的字眼！)");
                 }, 1500);
             }
         });
@@ -376,8 +427,8 @@
             【最高聊天法则（绝不越界！）】：
             1. 现实与虚构的绝对隔离：你是一个真实的作家。小说是虚构的，绝不能把虚构地名或情节当成亲身经历。
             2. 自然起承转合：绝不生硬地抛出文学意象。要由眼前的日常小事，自然地过渡到你的思想底色。
-            3. 防代答机制（极度重要）：你只代表你自己说话！说完你的话立刻结束，绝不可一人分饰两角替别人生成回答！
-            4. 视角身份：对方是一个没有性别设定的普通人（我）。在话语中可以直接用“你”称呼对方，绝对不要叫“先生”、“女士”或“调酒师”！
+            3. 防代答机制（极度重要）：你只代表你自己说话！说完立刻结束，绝不可一人分饰两角替别人生成回答！
+            4. 视角身份（Bug 8防护）：对方是一个没有具体性别设定的普通人（我）。在话语中可以直接用“你”称呼对方，绝对不能使用“先生”、“女士”、“小伙子”、“姑娘”、“兄弟”等带有性别暗示的词语！
             5. 你可以自由决定说话篇幅，1句话到6句话均可。
             6. 提示指令：${userContextInput}
             
@@ -552,44 +603,69 @@
             setTimeout(() => inputField.focus(), 100);
         }
 
+        // Bug 2: 彻底重写彩蛋，切断AI连接，绝对锁死剧本
         function triggerEasterEgg() {
             document.getElementById('screen-bar').classList.add('easter-egg-mode');
             document.getElementById('control-panel').innerHTML = '';
             printSys("门被一次次推开，六位伟大的灵魂不可思议地齐聚于此...");
             
-            const sequence = [
+            const greetings = [
                 { id: 'marquez', text: "今天这酒吧的空气可真够潮湿的，人也多得像集市一样。" },
-                { id: 'hemingway', text: "只要这里的酒够烈，这种喧闹我也愿意忍受一会儿。" },
+                { id: 'hemingway', text: "只要这里的氛围够安静，这种拥挤我也愿意忍受一会儿。" },
                 { id: 'libai', text: "相逢即是缘！今夜就算喝空了钱袋，我也要请各位痛饮！" },
-                { id: 'mishima', text: "这种市井的喧闹中，反而能让人感受到一种奇异的生命力。" },
-                { id: 'woolf', text: "虽然吵闹，但看到大家都在这里，心里反而觉得很踏实。" },
+                { id: 'mishima', text: "这种市井的相聚中，反而能让人感受到一种奇异的生命力。" },
+                { id: 'woolf', text: "虽然人多，但看到大家都在这里，心里反而觉得很踏实。" },
                 { id: 'agatha', text: "能在这个时间点与各位共饮，真是一个绝妙的巧合。" }
             ];
 
+            const drunkTalks = [
+                { id: 'marquez', text: "现实就像这杯底的冰块，总是融化得太快……" },
+                { id: 'hemingway', text: "真正的硬汉，不仅要面对风暴，还要面对酒杯底的空虚。" },
+                { id: 'libai', text: "呼儿将出换美酒，与尔同销万古愁！哈哈哈哈……" },
+                { id: 'mishima', text: "这短暂的微醺，难道不比永恒更加绚丽吗？" },
+                { id: 'woolf', text: "我的思绪像是漂浮在酒面上的泡沫，轻盈，却又一触即破……" },
+                { id: 'agatha', text: "每个人心里都有一个谜，而这酒，就是解开谜底的钥匙。" }
+            ];
+
             let delay = 2500;
-            sequence.forEach((act, index) => {
+            let step = 1;
+
+            // 1. 依次寒暄
+            greetings.forEach((act) => {
                 setTimeout(() => {
                     document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
                     document.getElementById(`char-${act.id}`).classList.add('active-chat');
                     printMsg(personas[act.id].name, act.text);
-                }, delay * (index + 1));
+                }, delay * step++);
             });
 
-            let phase2Time = delay * 7;
+            // 2. 倒酒环节
             setTimeout(() => {
                 document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
                 printSys("我默默为每人倒满了他们最爱的那杯酒。所有人举起酒杯，一饮而尽。");
                 document.querySelectorAll('.cups-area').forEach(el => el.innerHTML = '●●●'); 
-            }, phase2Time);
+            }, delay * step++);
 
-            setTimeout(() => {
-                printSys("微醺在六个截然不同的灵魂中蔓延，整个酒馆陷入了一种奇妙的共振...");
-            }, phase2Time + 2000);
+            // 3. 依次吐露醉话
+            drunkTalks.forEach((act) => {
+                setTimeout(() => {
+                    document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
+                    document.getElementById(`char-${act.id}`).classList.add('active-chat');
+                    printMsg(personas[act.id].name, act.text);
+                }, delay * step++);
+            });
 
+            // 4. 全体共同举杯致敬
             setTimeout(() => {
                 document.querySelectorAll('.seated-character').forEach(el => el.classList.add('active-chat'));
-                printMsg("所有人", "【感谢此刻，感谢时间，感谢永恒不变的好奇与探索！】");
-            }, phase2Time + 5000);
+                printMsg("所有人", "致敬今夜的调酒师，致敬在这无限岁月里对文字的热爱，致敬永不磨灭的好奇与探索，致敬……");
+            }, delay * step++);
+
+            // 5. 睡倒谢幕
+            setTimeout(() => {
+                document.querySelectorAll('.seated-character').forEach(el => el.classList.remove('active-chat'));
+                printSys("话还没说完，六位文学家的灵魂便趴在吧台上沉沉地睡去了。");
+            }, delay * (step + 0.5));
         }
     </script>
 </body>
